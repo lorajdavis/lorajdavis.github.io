@@ -103,9 +103,6 @@
 						## Step 1:
 						## Migrate
 
-						- From Archivists' Toolkit
-						- To ArchivesSpace 1.4.2 with container management plugin
-						- Do NOT migrate LCSH subjects
 						<img src="img/migrator.png" />
 					</script>
 				</section>
@@ -132,8 +129,26 @@
 							## Step 4:
 							## POST Subjects to ArchivesSpace
 
-							- Use Python script to iterate over each line
-							- More about script
+							```
+							import json
+							import requests
+
+							baseURL = 'http://YOURBACKENDURL:8089'
+							user='YOURUSERNAME'
+							password='YOURPASSWORD'
+
+							auth = requests.post(baseURL + '/users/'+user+'/login?password='+password).json()
+							session = auth["session"]
+							headers = {'X-ArchivesSpace-Session':session, 'Content_Type':'application/json'}
+
+							with open('YOURJSONFILE.json') as jsonfile:
+    						for line in jsonfile:
+									json_obj = json.loads(line)
+        					uri_print = json_obj['uri']
+									json_string = json.dumps(json_obj)
+									pushit = requests.post(baseURL + uri_print, headers=headers, data=json_string).json()
+									print pushit
+							```
 						</script>
 					</section>
 						<section data-markdown>
