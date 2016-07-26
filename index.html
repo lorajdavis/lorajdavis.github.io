@@ -98,6 +98,119 @@
 						</script>
 					</section>
 				</section>
+				<section data-markdown>
+					<script type="text/template">
+						## Step 1:
+						## Migrate
+
+						- From Archivists' Toolkit
+						- To ArchivesSpace 1.4.2 with container management plugin
+						- Do NOT migrate LCSH subjects
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+						## Step 2:
+						## Eric magic
+
+						-
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+						## Step 3:
+						## Create JSON
+
+						- Follow JSON model
+						- One line per subject record
+						- Warning about special characters, character encoding issues, and byte order marks
+					</script>
+					<section data-markdown>
+						<script type="text/template">
+							## Step 4:
+							## POST Subjects to ArchivesSpace
+
+							- Use Python script to iterate over each line
+							- More about script
+						</script>
+						<section data-markdown>
+							<script type="text/template">
+								## All Done!!!
+
+								- Uh, nope
+								- We've got:
+								  - Subject records
+									- Accession records
+									- Resource records
+								- But we don't got:
+								  - Subject records that are *linked* to accession and resource records
+							</script>
+							<section data-markdown>
+								<script type="text/template">
+									## Step 5:
+									## GET **all** Subjects, Resources, and Accessions
+
+									- Python script to GET all subjects, including:
+									  - Subjects that were already in (AAT genre forms, local terms, university functions, etc.)
+										- FAST subjects we've just created
+								  - Python script to GET resources and accessions while we're at it
+								</script>
+							</section>
+							<section data-markdown>
+								<script type="text/template">
+									## Step 6:
+									## Map Subjects to Resources/Accessions
+
+									- Use JSFiddle to extract the URI and external_ID fields from all Subjects JSON
+									- Map those URIs and external_IDs to Resources and Accessions in an Access database
+									- Merge it all together with JSFiddle
+								</script>
+							</section>
+							<section data-markdown>
+								<script type="text/template">
+									## Step 7:
+									## Create JSON
+
+									- Follow JSON model for Resources and Accessions
+									- One line per Resource/Accession record
+									- Warning: We thought we'd be "smart" and lump resources and accessions together - don't do this.  Happy to explain in greater detail why, but essentially there's versioning issues that must be kept in mind.
+								</script>
+							</section>
+							<section data-markdown>
+								<script type="text/template">
+									## Step 1:
+									## POST Resources and Accessions to ArchivesSpace
+
+									- Use Python script to iterate over each line
+								</script>
+							</section>
+							<section data-markdown>
+								<script type="text/template">
+									## Future projects:
+
+									- Agents
+									- Barcodes
+									- "API Wishlist"
+								</script>
+							</section>
+							<section data-markdown>
+								<script type="text/template">
+									## Resources
+
+									- "The Triad":
+									  - Valerie Addonizio, Archivist, vaddoniz@jhu.edu
+										- Lora Davis, Digital Archivist, ljdavis@jhu.edu or @lorajdavis
+										- Eric Hanson, Digital Content Metadata Librarian, ehanson8@jhu.edu
+									- GitHub:
+									  - JHU - https://github.com/jhu-archives-and-manuscripts
+										- Personal - https://github.com/lorajdavis/
+										- Thank you for sharing!
+									- ArchivesSpace API documentation - http://archivesspace.github.io/archivesspace/api/
+								</script>
+							</section>
+						</section>
+					</section>
+				</section>
 			</div>
 		</div>
 
