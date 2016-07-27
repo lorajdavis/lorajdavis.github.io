@@ -38,43 +38,6 @@
 				<section>
 					<section data-markdown>
 						<script type="text/template">
-							## Background
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-							## Legacy archival description practices
-
-							- Archivists' brains
-							- Word documents
-							- PDFs
-							- Spreadsheets
-							- Archivists' Toolkit
-							- ILS (Horizon)
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-							## Described by lots of different people
-
-							- Archivists
-							- Technical Services Librarians/Cataloggers
-							- Students
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-							## Inconsistent description + variability in describers = A Hot Mess
-
-							- Duplicative terms
-							- Some authorized, some not
-							- Various sources of authority (if authorized)
-						</script>
-					</section>
-				</section>
-				<section>
-					<section data-markdown>
-						<script type="text/template">
 							## ArchivesSpace migration as an opportunity
 						</script>
 					</section>
@@ -92,7 +55,6 @@
 							## Wants
 
 							- Make our data "linked data ready"
-							  - Because...
 							- Convert existing LCSH terms to FAST headings
 							- Gain facility in using the ArchivesSpace API
 						</script>
@@ -142,12 +104,11 @@
 							headers = {'X-ArchivesSpace-Session':session, 'Content_Type':'application/json'}
 
 							with open('YOURJSONFILE.json') as jsonfile:
-    						for line in jsonfile:
-									json_obj = json.loads(line)
-        					uri_print = json_obj['uri']
-									json_string = json.dumps(json_obj)
-									pushit = requests.post(baseURL + uri_print, headers=headers, data=json_string).json()
-									print pushit
+							    for line in jsonfile:
+							        json_obj = json.loads(line)
+							        json_string = json.dumps(json_obj)
+							        subjects = requests.post(baseURL+'/subjects', headers=headers, data=json_string).json()
+							        print subjects
 							```
 						</script>
 					</section>
@@ -200,16 +161,26 @@
 									## Step 1:
 									## POST Resources and Accessions to ArchivesSpace
 
-									- Use Python script to iterate over each line
-								</script>
-							</section>
-							<section data-markdown>
-								<script type="text/template">
-									## Future projects:
+									```
+									import json
+									import requests
 
-									- Agents
-									- Barcodes
-									- "API Wishlist"
+									baseURL = 'http://YOURBACKENDURL:8089'
+									user='YOURUSERNAME'
+									password='YOURPASSWORD'
+
+									auth = requests.post(baseURL + '/users/'+user+'/login?password='+password).json()
+									session = auth["session"]
+									headers = {'X-ArchivesSpace-Session':session, 'Content_Type':'application/json'}
+
+									with open('YOURJSONFILE.json') as jsonfile:
+									  for line in jsonfile:
+										  json_obj = json.loads(line)
+											uri_print = json_obj['uri']
+											json_string = json.dumps(json_obj)
+											pushit = requests.post(baseURL + uri_print, headers=headers, data=json_string).json()
+											print pushit
+									```
 								</script>
 							</section>
 							<section data-markdown>
@@ -217,9 +188,9 @@
 									## Resources
 
 									- "The Triad":
-									  - Valerie Addonizio, Archivist, vaddoniz@jhu.edu
+										- Valerie Addonizio, Archivist, vaddoniz@jhu.edu
 										- Lora Davis, Digital Archivist, ljdavis@jhu.edu or @lorajdavis
-										- Eric Hanson, Digital Content Metadata Librarian, ehanson8@jhu.edu
+										- Eric Hanson, Digital Content Metadata Specialist, ehanson8@jhu.edu
 									- GitHub:
 									  - JHU - https://github.com/jhu-archives-and-manuscripts
 										- Personal - https://github.com/lorajdavis/
