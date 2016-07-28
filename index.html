@@ -38,7 +38,7 @@
 				<section>
 					<section data-markdown>
 						<script type="text/template">
-							## ArchivesSpace migration as an opportunity
+							## ArchivesSpace Migration as an Opportunity
 						</script>
 					</section>
 					<section data-markdown>
@@ -57,6 +57,14 @@
 							- Make our data "linked data ready"
 							- Convert existing LCSH terms to FAST headings
 							- Gain facility in using the ArchivesSpace API
+
+							<aside class="notes">
+								We're looking forward to a future where our archival description lives in the same index as our Institutional Repository and MARC catalog records, and technical services is migrating those systems to FAST headings as well.
+								Using subjects as a way to colocate records from various sources.
+								Switched to FAST because FAST is optimised for Linked Data because headings have identifiers, unlike LCSH.
+								Yea, may be loss of detail in converting to FAST, but we cared more about being Linked Data ready than preserving granularity.
+								Had a cataloger assist with conversion.
+							</aside>
 						</script>
 					</section>
 				</section>
@@ -66,6 +74,10 @@
 						## Migrate
 
 						<img src="img/migrator.png" />
+
+						<aside class="notes">
+							Migrated into ArchivesSpace 1.4.2 with container management plugin.  Ran barcoder.  Migrated WITHOUT subjects.
+						</aside>
 					</script>
 				</section>
 				<section data-markdown>
@@ -73,7 +85,12 @@
 						## Step 2:
 						## Eric magic
 
-						-
+						<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">TFW you get email from buddy in TechSvcs stating: &quot;VIAF is an agent of the patriarchy&quot; w/ this pic <a href="https://twitter.com/hashtag/datamungingfail?src=hash">#datamungingfail</a> <a href="https://t.co/dCCmVq4P31">pic.twitter.com/dCCmVq4P31</a></p>&mdash; Lora Woodford (@lorajdavis) <a href="https://twitter.com/lorajdavis/status/743906722071330816">June 17, 2016</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+						<aside class="notes">
+							Migrated into ArchivesSpace 1.4.2 with container management plugin.  Ran barcoder.  Migrated WITHOUT subjects.
+						</aside>
 					</script>
 				</section>
 				<section data-markdown>
@@ -129,6 +146,26 @@
 								<script type="text/template">
 									## Step 5:
 									## GET **all** Subjects, Resources, and Accessions
+
+									```
+									import json
+									import requests
+
+									baseURL = 'http://YOURBACKEND:8089'
+									user='USERNAME'
+									password='PASSWORD'
+
+									auth = requests.post(baseURL + '/users/'+user+'/login?password='+password).json()
+									session = auth["session"]
+									headers = {'X-ArchivesSpace-Session':session, 'Content_Type':'application/json'}
+
+									endpoint = '/repositories/3/accessions'
+									arguments = '?page=1&page_size=3000'
+
+
+									output = requests.get(baseURL + endpoint + arguments, headers=headers).json()
+									print(json.dumps(output.get('results'), indent=2))
+									```
 
 									- Python script to GET all subjects, including:
 									  - Subjects that were already in (AAT genre forms, local terms, university functions, etc.)
