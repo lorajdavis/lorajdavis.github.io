@@ -80,19 +80,36 @@
 						</aside>
 					</script>
 				</section>
-				<section data-markdown>
-					<script type="text/template">
-						## Step 2:
-						## Eric magic
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							## Step 2a:
+							## Convert AT LCSH Subjects to FAST
 
-						<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">TFW you get email from buddy in TechSvcs stating: &quot;VIAF is an agent of the patriarchy&quot; w/ this pic <a href="https://twitter.com/hashtag/datamungingfail?src=hash">#datamungingfail</a> <a href="https://t.co/dCCmVq4P31">pic.twitter.com/dCCmVq4P31</a></p>&mdash; Lora Woodford (@lorajdavis) <a href="https://twitter.com/lorajdavis/status/743906722071330816">June 17, 2016</a></blockquote>
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+							<img src="img/namefail.png" />
 
-						<aside class="notes">
-							Migrated into ArchivesSpace 1.4.2 with container management plugin.  Ran barcoder.  Migrated WITHOUT subjects.
-						</aside>
-					</script>
-				</section>
+							<aside class="notes">
+								* Exported existing subject terms from AT tables.
+								* Used OpenRefine to run the list of existing LCSH headings against OCLC's FAST API to convert headings to FAST.  Also created some new headings (result of compound headings being broken apart).
+								* Had a cataloger review this work (about a week).
+								* Added FAST IDs into Authority ID field.
+								* Questions about this process should be directed to Eric.
+							</aside>
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Step 2b:
+							## Convert AT LCSH Subjects to FAST
+
+							<img src="img/subject.png" />
+
+							<aside class="notes">
+								* Added FAST IDs into Authority ID field.
+								* Questions about this process should be directed to Eric.
+							</aside>
+						</script>
+					</section>
 				<section data-markdown>
 					<script type="text/template">
 						## Step 3:
