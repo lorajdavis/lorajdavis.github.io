@@ -48,7 +48,7 @@
 							- Have subject terms in ASpace
 							- Subject terms that are consistent (e.g. minimize duplication)
 							- Subject terms that are controlled (e.g. from an appropriate authority file)
-					</script>
+						</script>
 					</section>
 					<section data-markdown>
 						<script type="text/template">
@@ -58,12 +58,12 @@
 							- Convert existing LCSH terms to FAST headings
 							- Gain facility in using the ArchivesSpace API
 
-							<aside class="notes">
-								We're looking forward to a future where our archival description lives in the same index as our Institutional Repository and MARC catalog records, and technical services is migrating those systems to FAST headings as well.
-								Using subjects as a way to colocate records from various sources.
-								Switched to FAST because FAST is optimised for Linked Data because headings have identifiers, unlike LCSH.
-								Yea, may be loss of detail in converting to FAST, but we cared more about being Linked Data ready than preserving granularity.
-								Had a cataloger assist with conversion.
+							<aside data-markdown>
+								* Looking toward a future where our archival description lives in the same index as our Institutional Repository and MARC catalog records.
+								* Technical services is migrating those systems to FAST headings.
+								* Using subjects as a way to colocate records from various sources.
+								* Switched to FAST because FAST is optimised for Linked Data. Headings have identifiers, unlike LCSH.
+								* Yea, may be loss of detail in converting to FAST, but we cared more about being Linked Data ready than preserving granularity.
 							</aside>
 						</script>
 					</section>
@@ -75,8 +75,10 @@
 
 						<img src="img/migrator.png" />
 
-						<aside class="notes">
-							Migrated into ArchivesSpace 1.4.2 with container management plugin.  Ran barcoder.  Migrated WITHOUT subjects.
+						<aside data-markdown>
+							* ArchivesSpace 1.4.2 with container management plugin.
+							* Ran barcoder.
+							* Migrated WITHOUT subjects.
 						</aside>
 					</script>
 				</section>
@@ -91,9 +93,7 @@
 							<aside class="notes">
 								* Exported existing subject terms from AT tables.
 								* Used OpenRefine to run the list of existing LCSH headings against OCLC's FAST API to convert headings to FAST.  Also created some new headings (result of compound headings being broken apart).
-								* Had a cataloger review this work (about a week).
-								* Added FAST IDs into Authority ID field.
-								* Questions about this process should be directed to Eric.
+								* Had a cataloger review this work (about a week to review 508 terms; guesstimate of 60-70% accuracy with OpenRefine process).
 							</aside>
 						</script>
 					</section>
@@ -102,6 +102,7 @@
 							### Step 2b:
 							### Convert AT LCSH Subjects to FAST
 
+							<img src="img/json.PNG" />
 							<img src="img/subject.PNG" />
 
 							<aside class="notes">
@@ -113,148 +114,159 @@
 				</section>
 				<section data-markdown>
 					<script type="text/template">
-						## Step 3:
-						## Create JSON
+						### Step 3:
+						### Generate JSON and POST to ArchivesSpace
 
-						- Follow JSON model
-						- One line per subject record
-						- Warning about special characters, character encoding issues, and byte order marks
+						```
+						import json
+						import requests
+
+						baseURL = 'http://YOURBACKENDURL:8089'
+						user='YOURUSERNAME'
+						password='YOURPASSWORD'
+
+						auth = requests.post(baseURL + '/users/'+user+'/login?password='+password).json()
+						session = auth["session"]
+						headers = {'X-ArchivesSpace-Session':session, 'Content_Type':'application/json'}
+
+						with open('YOURJSONFILE.json') as jsonfile:
+								for line in jsonfile:
+										json_obj = json.loads(line)
+										json_string = json.dumps(json_obj)
+										subjects = requests.post(baseURL+'/subjects', headers=headers, data=json_string).json()
+										print subjects
+						```
+
+						<aside data-markdown>
+							* Follow JSON model
+							* One line per subject record
+							* Warning about special characters, character encoding issues, and byte order marks
+						</aside>
 					</script>
 				</section>
 				<section data-markdown>
+					<script type="text/template">
+						## All Done!!!
+
+						- Uh, nope
+						- We've got:
+						  - Subject records
+							- Accession records
+							- Resource records
+						- But we don't got:
+						  - Subject records that are *linked* to accession and resource records
+					</script>
+				</section>
+				<section>
+					<section data-markdown>
 						<script type="text/template">
 							## Step 4:
-							## POST Subjects to ArchivesSpace
+							## GET **all** Subjects, Resources, and Accessions via API
 
 							```
 							import json
 							import requests
 
-							baseURL = 'http://YOURBACKENDURL:8089'
-							user='YOURUSERNAME'
-							password='YOURPASSWORD'
+							baseURL = 'http://YOURBACKEND:8089'
+							user='USERNAME'
+							password='PASSWORD'
 
 							auth = requests.post(baseURL + '/users/'+user+'/login?password='+password).json()
 							session = auth["session"]
 							headers = {'X-ArchivesSpace-Session':session, 'Content_Type':'application/json'}
 
-							with open('YOURJSONFILE.json') as jsonfile:
-							    for line in jsonfile:
-							        json_obj = json.loads(line)
-							        json_string = json.dumps(json_obj)
-							        subjects = requests.post(baseURL+'/subjects', headers=headers, data=json_string).json()
-							        print subjects
+							endpoint = '/repositories/3/accessions'
+							arguments = '?page=1&page_size=3000'
+
+
+							output = requests.get(baseURL + endpoint + arguments, headers=headers).json()
+							print(json.dumps(output.get('results'), indent=2))
 							```
+
+							<aside data-markdown>
+								* Python script to GET all subjects, including:
+								  * Subjects that were already in (AAT genre forms, local terms, university functions, etc.)
+									* FAST subjects we've just created
+								* Python script to GET resources and accessions while we're at it
 						</script>
 					</section>
-						<section data-markdown>
-							<script type="text/template">
-								## All Done!!!
+					<section data-markdown>
+						### Step 4 aside:
+						### Client Option
 
-								- Uh, nope
-								- We've got:
-								  - Subject records
-									- Accession records
-									- Resource records
-								- But we don't got:
-								  - Subject records that are *linked* to accession and resource records
-							</script>
-						</section>
-							<section data-markdown>
-								<script type="text/template">
-									## Step 5:
-									## GET **all** Subjects, Resources, and Accessions
+						<img src="img/client.PNG" />
 
-									```
-									import json
-									import requests
-
-									baseURL = 'http://YOURBACKEND:8089'
-									user='USERNAME'
-									password='PASSWORD'
-
-									auth = requests.post(baseURL + '/users/'+user+'/login?password='+password).json()
-									session = auth["session"]
-									headers = {'X-ArchivesSpace-Session':session, 'Content_Type':'application/json'}
-
-									endpoint = '/repositories/3/accessions'
-									arguments = '?page=1&page_size=3000'
-
-
-									output = requests.get(baseURL + endpoint + arguments, headers=headers).json()
-									print(json.dumps(output.get('results'), indent=2))
-									```
-
-									- Python script to GET all subjects, including:
-									  - Subjects that were already in (AAT genre forms, local terms, university functions, etc.)
-										- FAST subjects we've just created
-								  - Python script to GET resources and accessions while we're at it
-								</script>
-							</section>
-							<section data-markdown>
-								<script type="text/template">
-									## Step 6:
-									## Map Subjects to Resources/Accessions
-
-									- Use JSFiddle to extract the URI and external_ID fields from all Subjects JSON
-									- Map those URIs and external_IDs to Resources and Accessions in an Access database
-									- Merge it all together with JSFiddle
-								</script>
-							</section>
-							<section data-markdown>
-								<script type="text/template">
-									## Step 7:
-									## Create JSON
-
-									- Follow JSON model for Resources and Accessions
-									- One line per Resource/Accession record
-									- Warning: We thought we'd be "smart" and lump resources and accessions together - don't do this.  Happy to explain in greater detail why, but essentially there's versioning issues that must be kept in mind.
-								</script>
-							</section>
-							<section data-markdown>
-								<script type="text/template">
-									## Step 1:
-									## POST Resources and Accessions to ArchivesSpace
-
-									```
-									import json
-									import requests
-
-									baseURL = 'http://YOURBACKENDURL:8089'
-									user='YOURUSERNAME'
-									password='YOURPASSWORD'
-
-									auth = requests.post(baseURL + '/users/'+user+'/login?password='+password).json()
-									session = auth["session"]
-									headers = {'X-ArchivesSpace-Session':session, 'Content_Type':'application/json'}
-
-									with open('YOURJSONFILE.json') as jsonfile:
-									  for line in jsonfile:
-										  json_obj = json.loads(line)
-											uri_print = json_obj['uri']
-											json_string = json.dumps(json_obj)
-											pushit = requests.post(baseURL + uri_print, headers=headers, data=json_string).json()
-											print pushit
-									```
-								</script>
-							</section>
-							<section data-markdown>
-								<script type="text/template">
-									## Resources
-
-									- "The Triad":
-										- Valerie Addonizio, Archivist, vaddoniz@jhu.edu
-										- Lora Davis, Digital Archivist, ljdavis@jhu.edu or @lorajdavis
-										- Eric Hanson, Digital Content Metadata Specialist, ehanson8@jhu.edu
-									- GitHub:
-									  - JHU - https://github.com/jhu-archives-and-manuscripts
-										- Personal - https://github.com/lorajdavis/
-										- Thank you for sharing!
-									- ArchivesSpace API documentation - http://archivesspace.github.io/archivesspace/api/
-								</script>
-							</section>
-						</section>
+						<aside data-markdown>
+							* Client intially seemed like the way to go, but when we started yanking all our accessions and resources we started encountering timeout issues.
+							* Using GET script showed a significant amount of time savings.
+							* Script also allowed us to do some initial parsing of the data (e.g. removing the pagination header that came out with the JSON).
+						</aside>
 					</section>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+						## Step 5:
+						## Map Subjects to Resources/Accessions
+
+						<aside data-markdown>
+							* Had preserved the subject links to resources and accessions in AT.
+							* Exported relevant AT tables into an Access Database.
+							* Created a table in Access that mapped extern IDs from AT to new ASpace URIs.
+							* Used Access to export JSON (templating with reports) that relinked subjects to accessions/resources.
+							* Merged new JSON files with dump of accessions and resources using JSFiddle.
+						</aside>
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+						## Step 7:
+						## Create JSON
+
+						- Follow JSON model for Resources and Accessions
+						- One line per Resource/Accession record
+						- Warning: We thought we'd be "smart" and lump resources and accessions together - don't do this.  Happy to explain in greater detail why, but essentially there's versioning issues that must be kept in mind.
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+						## Step 1:
+						## POST Resources and Accessions to ArchivesSpace
+
+						```
+						import json
+						import requests
+
+						baseURL = 'http://YOURBACKENDURL:8089'
+						user='YOURUSERNAME'
+						password='YOURPASSWORD'
+
+						auth = requests.post(baseURL + '/users/'+user+'/login?password='+password).json()
+						session = auth["session"]
+						headers = {'X-ArchivesSpace-Session':session, 'Content_Type':'application/json'}
+
+						with open('YOURJSONFILE.json') as jsonfile:
+						  for line in jsonfile:
+							  json_obj = json.loads(line)
+								uri_print = json_obj['uri']
+								json_string = json.dumps(json_obj)
+								pushit = requests.post(baseURL + uri_print, headers=headers, data=json_string).json()
+								print pushit
+						```
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+						## Resources
+
+						- "The Triad"
+							- Valerie Addonizio, Archivist, vaddoniz@jhu.edu
+							- Lora Davis, Digital Archivist, ljdavis@jhu.edu or @lorajdavis
+							- Eric Hanson, Digital Content Metadata Specialist, ehanson8@jhu.edu
+						- GitHub
+						  - JHU: https://github.com/jhu-archives-and-manuscripts
+							- Personal: https://github.com/lorajdavis/
+						- **Thank you for sharing!**
+					</script>
 				</section>
 			</div>
 		</div>
