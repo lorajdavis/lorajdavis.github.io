@@ -102,11 +102,11 @@
 							</aside>
 					</section>
 				</section>
-				<section>
+				<section data-markdown>
 						<h3>Step 3: <br />
 						Generate JSON and POST to ArchivesSpace</h3>
 
-						<code>
+						```
 						import json
 						import requests
 
@@ -124,7 +124,7 @@
 										json_string = json.dumps(json_obj)
 										subjects = requests.post(baseURL+'/subjects', headers=headers, data=json_string).json()
 										print subjects
-						</code>
+						```
 
 						<aside class="notes">
 							* Follow JSON model
