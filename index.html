@@ -78,32 +78,29 @@
 				</section>
 				<section>
 					<section>
-							<h3>Step 2a: <br />
-							Convert AT LCSH Subjects to FAST</h3>
+							<h3>Step 2a: Convert AT LCSH Subjects to FAST</h3>
 
 							<img src="img/namefail.PNG" />
 
-							<aside class="notes">
+							<aside class="notes" data-markdown>
 								* Exported existing subject terms from AT tables.
 								* Used OpenRefine to run the list of existing LCSH headings against OCLC's FAST API to convert headings to FAST.  Also created some new headings (result of compound headings being broken apart).
 								* Had a cataloger review this work (about a week to review 508 terms; guesstimate of 60-70% accuracy with OpenRefine process).
 							</aside>
 					</section>
 					<section>
-							<h3>Step 2b: <br />
-							Convert AT LCSH Subjects to FAST</h3>
+							<h3>Step 2b: Convert AT LCSH Subjects to FAST</h3>
 
 							<img src="img/json.PNG" /> <img src="img/subject.PNG" />
 
-							<aside class="notes">
+							<aside class="notes" data-markdown>
 								* Added FAST IDs into Authority ID field.
 								* Questions about this process should be directed to Eric.
 							</aside>
 					</section>
 				</section>
 				<section>
-						<h3>Step 3: <br />
-						Generate JSON and POST to ArchivesSpace</h3>
+						<h3>Step 3: Generate JSON and POST to ArchivesSpace</h3>
 
 						<pre><code data-trim>
 import json
@@ -125,7 +122,7 @@ with open('YOURJSONFILE.json') as jsonfile:
 		print subjects
 						</code></pre>
 
-						<aside class="notes">
+						<aside class="notes" data-markdown>
 							* Follow JSON model
 							* One line per subject record
 							* Warning about special characters, character encoding issues, and byte order marks
@@ -152,30 +149,28 @@ with open('YOURJSONFILE.json') as jsonfile:
 				</section>
 				<section>
 					<section>
-							<h3>Step 4: <br />
-							GET **all** Subjects, Resources, and Accessions via API</h3>
+							<h3>Step 4: GET **all** Subjects, Resources, and Accessions via API</h3>
 
-							<code>
-							import json
-							import requests
+<pre><code>
+import json
+import requests
 
-							baseURL = 'http://YOURBACKEND:8089'
-							user='USERNAME'
-							password='PASSWORD'
+baseURL = 'http://YOURBACKEND:8089'
+user='USERNAME'
+password='PASSWORD'
 
-							auth = requests.post(baseURL + '/users/'+user+'/login?password='+password).json()
-							session = auth["session"]
-							headers = {'X-ArchivesSpace-Session':session, 'Content_Type':'application/json'}
+auth = requests.post(baseURL + '/users/'+user+'/login?password='+password).json()
+session = auth["session"]
+headers = {'X-ArchivesSpace-Session':session, 'Content_Type':'application/json'}
 
-							endpoint = '/repositories/3/accessions'
-							arguments = '?page=1&page_size=3000'
+endpoint = '/repositories/3/accessions'
+arguments = '?page=1&page_size=3000'
 
+output = requests.get(baseURL + endpoint + arguments, headers=headers).json()
+print(json.dumps(output.get('results'), indent=2))
+</pre></code>
 
-							output = requests.get(baseURL + endpoint + arguments, headers=headers).json()
-							print(json.dumps(output.get('results'), indent=2))
-						</code>
-
-							<aside class="notes">
+							<aside class="notes" data-markdown>
 								* Python script to GET all subjects, including:
 								  * Subjects that were already in (AAT genre forms, local terms, university functions, etc.)
 									* FAST subjects we've just created
@@ -183,12 +178,11 @@ with open('YOURJSONFILE.json') as jsonfile:
 							</aside>
 					</section>
 					<section>
-						<h3>Step 4 aside: <br />
-						Client Option</h3>
+						<h3>Step 4 aside: 						Client Option</h3>
 
 						<img src="img/client.PNG" />
 
-						<aside class="notes">
+						<aside class="notes" data-markdown>
 							* Client intially seemed like the way to go, but when we started yanking all our accessions and resources we started encountering timeout issues.
 							* Using GET script showed a significant amount of time savings.
 							* Script also allowed us to do some initial parsing of the data (e.g. removing the pagination header that came out with the JSON).
@@ -196,12 +190,11 @@ with open('YOURJSONFILE.json') as jsonfile:
 				</section>
 				<section>
 					<section>
-							<h3>Step 5: <br />
-							Map Subjects to Resources/Accessions</h3>
+							<h3>Step 5: Map Subjects to Resources/Accessions</h3>
 
 							<img src="img/fiddle.png" />
 
-							<aside class="notes">
+							<aside class="notes" data-markdown>
 								* Had preserved the subject links to resources and accessions in AT.
 								* Exported relevant AT tables into an Access Database.
 								* Created a table in Access that mapped extern IDs from AT to new ASpace URIs.
@@ -210,8 +203,7 @@ with open('YOURJSONFILE.json') as jsonfile:
 							</aside>
 					</section>
 					<section>
-							<h3>Step 5 aside: <br />
-							Our unique situation</h3>
+							<h3>Step 5 aside: Our unique situation</h3>
 
 							<ul>
 								<li>We were doing this at the time of initial migration, so this workflow made sense for our use case.</li>
@@ -221,34 +213,33 @@ with open('YOURJSONFILE.json') as jsonfile:
 					</section>
 				</section>
 				<section>
-						<h3>Step 6: <br />
-						Create JSON and POST to ArchivesSpace</h3>
+						<h3>Step 6: 						Create JSON and POST to ArchivesSpace</h3>
 
-						<code>
-						import json
-						import requests
+<pre><code>
+import json
+import requests
 
-						baseURL = 'http://YOURBACKENDURL:8089'
-						user='YOURUSERNAME'
-						password='YOURPASSWORD'
+baseURL = 'http://YOURBACKENDURL:8089'
+user='YOURUSERNAME'
+password='YOURPASSWORD'
 
-						auth = requests.post(baseURL + '/users/'+user+'/login?password='+password).json()
-						session = auth["session"]
-						headers = {'X-ArchivesSpace-Session':session, 'Content_Type':'application/json'}
+auth = requests.post(baseURL + '/users/'+user+'/login?password='+password).json()
+session = auth["session"]
+headers = {'X-ArchivesSpace-Session':session, 'Content_Type':'application/json'}
 
-						with open('YOURJSONFILE.json') as jsonfile:
-						  for line in jsonfile:
-								json_obj = json.loads(line)
-						    uri_print = json_obj['uri']
-								json_string = json.dumps(json_obj)
-								pushit = requests.post(baseURL + uri_print, headers=headers, data=json_string).json()
-								print pushit
-						</code>
+with open('YOURJSONFILE.json') as jsonfile:
+	for line in jsonfile:
+		json_obj = json.loads(line)
+		uri_print = json_obj['uri']
+		json_string = json.dumps(json_obj)
+		pushit = requests.post(baseURL + uri_print, headers=headers, data=json_string).json()
+		print pushit
+</code></pre>
 
-						<aside class="notes">
-						- Follow JSON model for Resources and Accessions
-						- One line per Resource/Accession record
-						- Warning: We thought we'd be "smart" and lump resources and accessions together - don't do this.  Happy to explain in greater detail why, but essentially there's versioning issues that must be kept in mind.
+						<aside class="notes" data-markdown>
+						* Follow JSON model for Resources and Accessions
+						* One line per Resource/Accession record
+						* Warning: We thought we'd be "smart" and lump resources and accessions together - don't do this.  Happy to explain in greater detail why, but essentially there's versioning issues that must be kept in mind.
 					</aside>
 				</section>
 				<section>
