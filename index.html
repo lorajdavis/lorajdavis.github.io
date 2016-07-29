@@ -135,7 +135,7 @@
 										print subjects
 						```
 
-						<aside data-markdown>
+						<aside data-markdown class="notes">
 							* Follow JSON model
 							* One line per subject record
 							* Warning about special characters, character encoding issues, and byte order marks
@@ -181,7 +181,7 @@
 							print(json.dumps(output.get('results'), indent=2))
 							```
 
-							<aside data-markdown>
+							<aside data-markdown class="notes">
 								* Python script to GET all subjects, including:
 								  * Subjects that were already in (AAT genre forms, local terms, university functions, etc.)
 									* FAST subjects we've just created
@@ -194,7 +194,7 @@
 
 						<img src="img/client.PNG" />
 
-						<aside data-markdown>
+						<aside data-markdown class="notes">
 							* Client intially seemed like the way to go, but when we started yanking all our accessions and resources we started encountering timeout issues.
 							* Using GET script showed a significant amount of time savings.
 							* Script also allowed us to do some initial parsing of the data (e.g. removing the pagination header that came out with the JSON).
