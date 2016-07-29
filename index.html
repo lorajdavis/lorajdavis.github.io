@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>Davis ArchivesSpace Presentation</title>
+		<title>Davis - ArchivesSpace Member Meeting Presentation</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/black.css">
@@ -26,10 +26,10 @@
 			<div class="slides">
 				<section data-markdown>
 					<script type="text/template">
-						# When Your Metadata is Messydata:
+						# WHEN YOUR METADATA IS MESSYDATA:
 						## Subject Cleanup via the ArchivesSpace API
 
-
+						<br />
 						###### Lora J. Davis | Digital Archivist | Johns Hopkins University
 					</script>
 				</section>
@@ -45,7 +45,7 @@
 
 							- Have subject terms in ArchivesSpace
 							- Subject terms that are:
-							  - consistent (e.g. minimize duplication)
+                - consistent (e.g. minimize duplication)
 								- controlled (e.g. from an appropriate authority file)
 						</script>
 					</section>
@@ -74,7 +74,7 @@
 
 						<img src="img/migrator.png" />
 
-						<aside data-markdown>
+						<aside class="notes">
 							* ArchivesSpace 1.4.2 with container management plugin.
 							* Ran barcoder.
 							* Migrated WITHOUT subjects.
@@ -135,7 +135,7 @@
 										print subjects
 						```
 
-						<aside data-markdown class="notes">
+						<aside class="notes">
 							* Follow JSON model
 							* One line per subject record
 							* Warning about special characters, character encoding issues, and byte order marks
@@ -181,7 +181,7 @@
 							print(json.dumps(output.get('results'), indent=2))
 							```
 
-							<aside data-markdown class="notes">
+							<aside class="notes">
 								* Python script to GET all subjects, including:
 								  * Subjects that were already in (AAT genre forms, local terms, university functions, etc.)
 									* FAST subjects we've just created
@@ -194,7 +194,7 @@
 
 						<img src="img/client.PNG" />
 
-						<aside data-markdown class="notes">
+						<aside class="notes">
 							* Client intially seemed like the way to go, but when we started yanking all our accessions and resources we started encountering timeout issues.
 							* Using GET script showed a significant amount of time savings.
 							* Script also allowed us to do some initial parsing of the data (e.g. removing the pagination header that came out with the JSON).
@@ -209,7 +209,7 @@
 
 							<img src="img/fiddle.png" />
 
-							<aside data-markdown>
+							<aside class="notes">
 								* Had preserved the subject links to resources and accessions in AT.
 								* Exported relevant AT tables into an Access Database.
 								* Created a table in Access that mapped extern IDs from AT to new ASpace URIs.
