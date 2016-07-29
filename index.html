@@ -78,7 +78,7 @@
 				</section>
 				<section>
 					<section>
-							<h3>Step 2a: Convert AT LCSH Subjects to FAST</h3>
+							<h3>Step 2: Convert LCSH Subjects to FAST</h3>
 
 							<img src="img/namefail.PNG" />
 
@@ -89,7 +89,7 @@
 							</aside>
 					</section>
 					<section>
-							<h3>Step 2b: Convert AT LCSH Subjects to FAST</h3>
+							<h3>Step 2: Convert LCSH Subjects to FAST (cont.)</h3>
 
 							<img src="img/json.PNG" /> <img src="img/subject.PNG" />
 
@@ -100,7 +100,7 @@
 					</section>
 				</section>
 				<section>
-						<h3>Step 3: Generate JSON and POST to ArchivesSpace</h3>
+						<h3>Step 3: Generate JSON and POST</h3>
 
 						<pre><code data-trim>
 import json
@@ -149,7 +149,7 @@ with open('YOURJSONFILE.json') as jsonfile:
 				</section>
 				<section>
 					<section>
-							<h3>Step 4: GET **all** Subjects, Resources, and Accessions via API</h3>
+							<h3>Step 4: GET <emph>all</emph> Subjects, Resources, and Accessions via API</h3>
 
 <pre><code>
 import json
@@ -178,7 +178,7 @@ print(json.dumps(output.get('results'), indent=2))
 							</aside>
 					</section>
 					<section>
-						<h3>Step 4 aside: Client Option</h3>
+						<h3>Step 4 (aside): Client Option</h3>
 
 						<img src="img/client.PNG" />
 
@@ -191,7 +191,7 @@ print(json.dumps(output.get('results'), indent=2))
 				</section>
 				<section>
 					<section>
-							<h3>Step 5: Map Subjects to Resources/Accessions</h3>
+							<h3>Step 5: Link Subjects to Resources/Accessions</h3>
 
 							<img src="img/fiddle.png" />
 
@@ -204,7 +204,7 @@ print(json.dumps(output.get('results'), indent=2))
 							</aside>
 					</section>
 					<section>
-							<h3>Step 5 aside: Our unique situation</h3>
+							<h3>Step 5 (aside): Our Unique Situation</h3>
 
 							<ul>
 								<li>We were doing this at the time of initial migration, so this workflow made sense for our use case.</li>
@@ -214,7 +214,7 @@ print(json.dumps(output.get('results'), indent=2))
 					</section>
 				</section>
 				<section>
-						<h3>Step 6: 						Create JSON and POST to ArchivesSpace</h3>
+						<h3>Step 6: Generate JSON and POST</h3>
 
 <pre><code>
 import json
