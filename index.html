@@ -106,7 +106,7 @@
 						<h3>Step 3: <br />
 						Generate JSON and POST to ArchivesSpace</h3>
 
-						```
+						<code>
 						import json
 						import requests
 
@@ -124,7 +124,7 @@
 										json_string = json.dumps(json_obj)
 										subjects = requests.post(baseURL+'/subjects', headers=headers, data=json_string).json()
 										print subjects
-						```
+						</code>
 
 						<aside class="notes">
 							* Follow JSON model
@@ -156,7 +156,7 @@
 							<h3>Step 4: <br />
 							GET **all** Subjects, Resources, and Accessions via API</h3>
 
-							```
+							<code>
 							import json
 							import requests
 
@@ -174,7 +174,7 @@
 
 							output = requests.get(baseURL + endpoint + arguments, headers=headers).json()
 							print(json.dumps(output.get('results'), indent=2))
-							```
+						</code>
 
 							<aside class="notes">
 								* Python script to GET all subjects, including:
@@ -225,7 +225,7 @@
 						<h3>Step 6: <br />
 						Create JSON and POST to ArchivesSpace</h3>
 
-						```
+						<code>
 						import json
 						import requests
 
@@ -244,7 +244,7 @@
 								json_string = json.dumps(json_obj)
 								pushit = requests.post(baseURL + uri_print, headers=headers, data=json_string).json()
 								print pushit
-						```
+						</code>
 
 						<aside class="notes">
 						- Follow JSON model for Resources and Accessions
