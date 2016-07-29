@@ -29,10 +29,7 @@
 						# When Your Metadata is Messydata:
 						## Subject Cleanup via the ArchivesSpace API
 
-
-						###### Lora J. Davis
-						###### Digital Archivist
-						###### Johns Hopkins University
+						###### Lora J. Davis | Digital Archivist | Johns Hopkins University
 					</script>
 				</section>
 				<section>
@@ -203,34 +200,38 @@
 						</aside>
 					</section>
 				</section>
-				<section data-markdown>
-					<script type="text/template">
-						## Step 5:
-						## Map Subjects to Resources/Accessions
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							### Step 5:
+							### Map Subjects to Resources/Accessions
 
-						<aside data-markdown>
-							* Had preserved the subject links to resources and accessions in AT.
-							* Exported relevant AT tables into an Access Database.
-							* Created a table in Access that mapped extern IDs from AT to new ASpace URIs.
-							* Used Access to export JSON (templating with reports) that relinked subjects to accessions/resources.
-							* Merged new JSON files with dump of accessions and resources using JSFiddle.
-						</aside>
-					</script>
+							<img src="img/fiddle.png" />
+
+							<aside data-markdown>
+								* Had preserved the subject links to resources and accessions in AT.
+								* Exported relevant AT tables into an Access Database.
+								* Created a table in Access that mapped extern IDs from AT to new ASpace URIs.
+								* Used Access to export JSON (templating with reports) that relinked subjects to accessions/resources.
+								* Merged new JSON files with dump of accessions and resources using JSFiddle.
+							</aside>
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							### Step 5 aside:
+							### Our unique situation
+
+							* We were doing this at the time of initial migration, so this workflow made sense for our use case.
+							* This might also work well if you're getting subjects from MARC records or a homegrown database.
+							* Essentially, your mileage may vary.
+						</script>
+					</section>
 				</section>
 				<section data-markdown>
 					<script type="text/template">
-						## Step 7:
-						## Create JSON
-
-						- Follow JSON model for Resources and Accessions
-						- One line per Resource/Accession record
-						- Warning: We thought we'd be "smart" and lump resources and accessions together - don't do this.  Happy to explain in greater detail why, but essentially there's versioning issues that must be kept in mind.
-					</script>
-				</section>
-				<section data-markdown>
-					<script type="text/template">
-						## Step 1:
-						## POST Resources and Accessions to ArchivesSpace
+						### Step 6:
+						### Create JSON and POST to ArchivesSpace
 
 						```
 						import json
@@ -246,17 +247,23 @@
 
 						with open('YOURJSONFILE.json') as jsonfile:
 						  for line in jsonfile:
-							  json_obj = json.loads(line)
-								uri_print = json_obj['uri']
+								json_obj = json.loads(line)
+						    uri_print = json_obj['uri']
 								json_string = json.dumps(json_obj)
 								pushit = requests.post(baseURL + uri_print, headers=headers, data=json_string).json()
 								print pushit
 						```
+
+						<aside class="notes">
+						- Follow JSON model for Resources and Accessions
+						- One line per Resource/Accession record
+						- Warning: We thought we'd be "smart" and lump resources and accessions together - don't do this.  Happy to explain in greater detail why, but essentially there's versioning issues that must be kept in mind.
+					</aside>
 					</script>
 				</section>
 				<section data-markdown>
 					<script type="text/template">
-						## Resources
+						### Additional Resources
 
 						- "The Triad"
 							- Valerie Addonizio, Archivist, vaddoniz@jhu.edu
