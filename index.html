@@ -107,23 +107,23 @@
 						Generate JSON and POST to ArchivesSpace</h3>
 
 						<pre><code data-trim>
-						import json
-						import requests
+import json
+import requests
 
-						baseURL = 'http://YOURBACKENDURL:8089'
-						user='YOURUSERNAME'
-						password='YOURPASSWORD'
+baseURL = 'http://YOURBACKENDURL:8089'
+user='YOURUSERNAME'
+password='YOURPASSWORD'
 
-						auth = requests.post(baseURL + '/users/'+user+'/login?password='+password).json()
-						session = auth["session"]
-						headers = {'X-ArchivesSpace-Session':session, 'Content_Type':'application/json'}
+auth = requests.post(baseURL + '/users/'+user+'/login?password='+password).json()
+session = auth["session"]
+headers = {'X-ArchivesSpace-Session':session, 'Content_Type':'application/json'}
 
-						with open('YOURJSONFILE.json') as jsonfile:
-						  for line in jsonfile:
-							  json_obj = json.loads(line)
-								json_string = json.dumps(json_obj)
-								subjects = requests.post(baseURL+'/subjects', headers=headers, data=json_string).json()
-								print subjects
+with open('YOURJSONFILE.json') as jsonfile:
+	for line in jsonfile:
+		json_obj = json.loads(line)
+		json_string = json.dumps(json_obj)
+		subjects = requests.post(baseURL+'/subjects', headers=headers, data=json_string).json()
+		print subjects
 						</code></pre>
 
 						<aside class="notes">
